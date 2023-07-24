@@ -1,0 +1,43 @@
+YouTube Data Analytics on AWS
+
+This project performs basic data analytics on YouTube dataset using AWS services like S3, Lambda, Athena and QuickSight.
+
+Data Lake Architecture
+
+The data is stored in a S3 data lake for scalable and cost-efficient storage. S3 buckets are created for raw zone and processed zone. Lambda functions process and transform data from raw into curated datasets for analytics.
+
+Data Ingestion
+
+The raw YouTube data is downloaded from Kaggle in JSON format. The data covers statistics and metadata for thousands of videos.
+
+The files are uploaded to a S3 bucket in raw zone using AWS CLI:
+
+aws s3 cp youtube-data.json s3://raw-youtube-data
+
+Data Processing
+
+A Lambda function is triggered on new files arriving in raw S3 bucket. The function:
+
+Reads the raw JSON data
+Extracts relevant fields into a Pandas dataframe
+Saves dataframe to parquet format in processed bucket
+Python libraries like Pandas, AWS Data Wrangler are used for data processing.
+
+Lambda IAM Role
+
+The Lambda function is assigned an IAM role with S3 and CloudWatch Logs permissions. This allows the function to read from raw bucket and write to processed bucket.
+
+Athena Table
+
+An Athena table is created over the processed S3 data to make it queryable via SQL. The OpenCSV Serde is used to infer schema from the data.
+
+Analytics
+
+QuickSight connects to the Athena table to visualize and find insights from the YouTube data:
+
+Top videos by views, likes, duration
+Category-wise statistics
+Daily/monthly trends
+Dashboards are created in QuickSight to share with stakeholders.
+
+Further analytics could extract usage metrics, predict popular videos, and more.
